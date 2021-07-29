@@ -38,9 +38,9 @@ namespace IndianCensusProject
         [TestCategory("Given State Census CSV return Count of fields")]
         public void TestMethodToCheckCountOfDataRetrieved()
         {
-            int expected = 28;
+            int expected = 29;
             string[] result = getCensusAdapter.GetCensusData(censusFilePath, "﻿State,Population,Increase,Area,Density");
-            int actual = result.Length - 1;
+            int actual = result.Length;
             Assert.AreEqual(expected, actual);
         }
 
@@ -72,7 +72,7 @@ namespace IndianCensusProject
             }
             catch (CensusCustomException ex)
             {
-                Assert.AreEqual(ex.Message, "Invalid file type");
+                Assert.AreEqual(ex.Message, "Invalid Extension");
             }
         }
         //TC1.4:Check for proper Delimiter
@@ -104,6 +104,76 @@ namespace IndianCensusProject
                 Assert.AreEqual(ex.Message, "Incorrect Header");
             }
         }
+        //TC2.1:Count State CSV records
+        [TestMethod]
+        [TestCategory("Given State CSV Code CSV return Count of fields")]
+        public void TestMethodToCheckCountOfDataRetrieved_StateCodeCsv()
+        {
+            //Excluding Header
+            int expected = 11;
+            string[] result = getCensusAdapter.GetCensusData(stateCodeFilePath, "SerailNo,StateName,StateCode");
+            int actual = result.Length - 1;
+            Assert.AreEqual(expected, actual);
+        }
+        //TC2.2: Check whether File exists
+        [TestMethod]
+        [TestCategory("Invalid File Name")]
+        public void TestMethodToCheckInvalidFileName_StateCodeCsv()
+        {
+            try
+            {
+                getCensusAdapter.GetCensusData(stateCodeInvalidFilePath, "SerailNo,StateName,StateCode");
 
+            }
+            catch (CensusCustomException ex)
+            {
+                Assert.AreEqual(ex.Message, "File not found!");
+            }
+        }
+
+        //TC2.3:Check for proper extension
+        [TestMethod]
+        [TestCategory("Invalid Extension")]
+        public void TestMethodToCheckInvalidFileType_StateCodeCsv()
+        {
+            try
+            {
+                getCensusAdapter.GetCensusData(stateCodeInvalidFileTypePath, "SerailNo,StateName,StateCode");
+
+            }
+            catch (CensusCustomException ex)
+            {
+                Assert.AreEqual(ex.Message, "Invalid Extension");
+            }
+        }
+        //TC2.4:Check for proper delimiter
+        [TestMethod]
+        [TestCategory("Invalid Delimiter")]
+        public void TestMethodToCheckInvalidDelimiter_StateCodeCsv()
+        {
+            try
+            {
+                stateCodeCsv.LoadStateCsv(CountryChecker.Country.INDIA, stateCodeInvalidFileDelimiterPath, "SerailNo.StateName.StateCode");
+
+            }
+            catch (CensusCustomException ex)
+            {
+                Assert.AreEqual(ex.Message, "Invalid Delimiter");
+            }
+        }
+        //TC2.5: Incorrect Header
+        [TestMethod]
+        [TestCategory("Invalid Header")]
+        public void TestMethodToCheckInvalidHeader_StateCodeCsv()
+        {
+            try
+            {
+                stateCodeCsv.LoadStateCsv(CountryChecker.Country.INDIA, stateCodeInvalidFileHeaderPath, "SerailNo,StateName,StateCode");
+            }
+            catch (CensusCustomException ex)
+            {
+                Assert.AreEqual(ex.Message, "Incorrect Header");
+            }
+        }
     }
 }
