@@ -8,8 +8,7 @@ namespace IndianCensusProject
     {
         //Interface
         IStateCensusCsvOperations censusAnalyzer;
-        IStateCodeCsvOperations stateCodeCsv;
-        GetCensusAdapter getCensusAdapter;
+        CsvAdapterFactory getCensusAdapter;
 
         //Path for Indian State Census
         string censusFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\IndianStateCensusInformation.csv";
@@ -17,7 +16,6 @@ namespace IndianCensusProject
         string invalidFileTypePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidCensusFile.css";
         string invalidDelimiterFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\IndianStateCensusWithInvalidDelimiter.csv";
         string invalidHeaderFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\IndianStateCensusWithInvalidHeader.csv";
-
         //Path for state code csv file
         string stateCodeFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\IndianStateCode.csv";
         string stateCodeInvalidFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidIndianState.csv";
@@ -25,12 +23,11 @@ namespace IndianCensusProject
         string stateCodeInvalidFileDelimiterPath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidIndianStateDelimiterCode.csv";
         string stateCodeInvalidFileHeaderPath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidIndianStateHeaderCode.csv";
 
+
         [TestInitialize]
         public void SetUp()
         {
-            getCensusAdapter = new GetCensusAdapter();
-            censusAnalyzer = new CensusAnalyzer();
-            stateCodeCsv = new CsvStateAnalyzer();
+            getCensusAdapter = new CsvAdapterFactory();
         }
 
         //TC1.1: Count the number of records
@@ -39,7 +36,7 @@ namespace IndianCensusProject
         public void TestMethodToCheckCountOfDataRetrieved()
         {
             int expected = 29;
-            string[] result = getCensusAdapter.GetCensusData(censusFilePath, "﻿State,Population,Increase,Area,Density");
+            string[] result = getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, censusFilePath, "﻿State,Population,Increase,Area,Density");
             int actual = result.Length;
             Assert.AreEqual(expected, actual);
         }
@@ -51,7 +48,7 @@ namespace IndianCensusProject
         {
             try
             {
-                getCensusAdapter.GetCensusData(invalidFileCsvPath, "State,Population,Increase,Area,Density");
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, invalidFileCsvPath, "State,Population,Increase,Area,Density");
 
             }
             catch (CensusCustomException ex)
@@ -67,7 +64,7 @@ namespace IndianCensusProject
         {
             try
             {
-                getCensusAdapter.GetCensusData(invalidFileTypePath, "State,Population,Increase,Area,Density");
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, invalidFileTypePath, "State,Population,Increase,Area,Density");
 
             }
             catch (CensusCustomException ex)
@@ -82,7 +79,7 @@ namespace IndianCensusProject
         {
             try
             {
-                censusAnalyzer.LoadCountryCsv(CountryChecker.Country.INDIA,invalidDelimiterFilePath,"State-Population-Increase.Area.Density");
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA,invalidDelimiterFilePath,"State,Population,Increase,Area,Density");
 
             }
             catch (CensusCustomException ex)
@@ -97,7 +94,7 @@ namespace IndianCensusProject
         {
             try
             {
-                censusAnalyzer.LoadCountryCsv(CountryChecker.Country.INDIA, invalidHeaderFilePath, "State,Population,Increase,Area,Density");
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, invalidHeaderFilePath, "State,Population,Increase,Area,Density");
             }
             catch (CensusCustomException ex)
             {
@@ -111,7 +108,7 @@ namespace IndianCensusProject
         {
             //Excluding Header
             int expected = 11;
-            string[] result = getCensusAdapter.GetCensusData(stateCodeFilePath, "SerailNo,StateName,StateCode");
+            string[] result = getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeFilePath, "SerailNo,StateName,StateCode");
             int actual = result.Length - 1;
             Assert.AreEqual(expected, actual);
         }
@@ -122,7 +119,7 @@ namespace IndianCensusProject
         {
             try
             {
-                getCensusAdapter.GetCensusData(stateCodeInvalidFilePath, "SerailNo,StateName,StateCode");
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeInvalidFilePath, "SerailNo,StateName,StateCode");
 
             }
             catch (CensusCustomException ex)
@@ -138,7 +135,7 @@ namespace IndianCensusProject
         {
             try
             {
-                getCensusAdapter.GetCensusData(stateCodeInvalidFileTypePath, "SerailNo,StateName,StateCode");
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeInvalidFileTypePath, "SerailNo,StateName,StateCode");
 
             }
             catch (CensusCustomException ex)
@@ -153,7 +150,7 @@ namespace IndianCensusProject
         {
             try
             {
-                stateCodeCsv.LoadStateCsv(CountryChecker.Country.INDIA, stateCodeInvalidFileDelimiterPath, "SerailNo.StateName.StateCode");
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeInvalidFileDelimiterPath, "SerailNo.StateName.StateCode");
 
             }
             catch (CensusCustomException ex)
@@ -168,12 +165,13 @@ namespace IndianCensusProject
         {
             try
             {
-                stateCodeCsv.LoadStateCsv(CountryChecker.Country.INDIA, stateCodeInvalidFileHeaderPath, "SerailNo,StateName,StateCode");
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeInvalidFileHeaderPath, "SerailNo,StateName,StateCode");
             }
             catch (CensusCustomException ex)
             {
                 Assert.AreEqual(ex.Message, "Incorrect Header");
             }
         }
+
     }
 }
