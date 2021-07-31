@@ -6,8 +6,7 @@ namespace IndianCensusProject
     [TestClass]
     public class UnitTest1
     {
-        //Interface
-        IStateCensusCsvOperations censusAnalyzer;
+        //Create object for CsvAdapter Factory
         CsvAdapterFactory getCensusAdapter;
 
         //Path for Indian State Census
@@ -101,6 +100,7 @@ namespace IndianCensusProject
                 Assert.AreEqual(ex.Message, "Incorrect Header");
             }
         }
+        //USECASE 2
         //TC2.1:Count State CSV records
         [TestMethod]
         [TestCategory("Given State CSV Code CSV return Count of fields")]

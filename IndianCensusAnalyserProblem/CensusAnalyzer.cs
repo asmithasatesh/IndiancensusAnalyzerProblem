@@ -5,12 +5,11 @@ using System.Text;
 
 namespace IndianCensusAnalyserProblem
 {
-    public class CensusAnalyzer : GetCensusAdapter, IStateCensusCsvOperations
+    public class CensusAnalyzer : GetCensusAdapter
     {
         public string[] LoadCountryCsv(string fileCsvPath, string header)
         {
             string[] result=new string[50];
-
             try
             {
                 result = GetCensusData(fileCsvPath, header);
@@ -21,7 +20,6 @@ namespace IndianCensusAnalyserProblem
                     if (!member.Contains(","))
                         throw new CensusCustomException(CensusCustomException.ExceptionType.INVALID_DELIMITER, "Invalid Delimiter");
                 }
-
             }
             catch (CensusCustomException ex)
             {

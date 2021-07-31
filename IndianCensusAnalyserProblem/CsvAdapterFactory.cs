@@ -13,14 +13,14 @@ namespace IndianCensusAnalyserProblem
                 //Checking the country 
                 switch (country)
                 {
-                    case (CountryChecker.Country.INDIA):
-                        {
-                            return new CensusAnalyzer().LoadCountryCsv(csvFilePath, headers);
-                        }
-                    default:
-                        {
-                            throw new CensusCustomException(CensusCustomException.ExceptionType.NO_SUCH_COUNTRY, "NO SUCH COUNTRY");
-                        }
+                case (CountryChecker.Country.INDIA):
+                    {
+                        return new CensusAnalyzer().LoadCountryCsv(csvFilePath, headers);
+                    }
+                default:
+                    {
+                        throw new CensusCustomException(CensusCustomException.ExceptionType.NO_SUCH_COUNTRY, "NO SUCH COUNTRY");
+                    }
                 }
             }
             catch (CensusCustomException ex)
