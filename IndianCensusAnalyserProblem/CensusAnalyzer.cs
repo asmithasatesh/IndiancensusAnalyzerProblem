@@ -7,34 +7,27 @@ namespace IndianCensusAnalyserProblem
 {
     public class CensusAnalyzer : GetCensusAdapter, IStateCensusCsvOperations
     {
-        public void LoadCountryCsv(CountryChecker.Country country ,string fileCsvPath, string header)
+        public string[] LoadCountryCsv(string fileCsvPath, string header)
         {
+            string[] result = new string[50];
+
             try
             {
-                //Checking the country 
-                switch (country)
+                result = GetCensusData(fileCsvPath, header);
+                //Skip the headers
+                foreach (var member in result.Skip(1))
                 {
-                    case (CountryChecker.Country.INDIA):
-                        {
-                            string[] result = GetCensusData(fileCsvPath, header);
-                            foreach (var member in result.Skip(1))
-                            {
-                                //Checks for delimiter 
-                                if (!member.Contains(","))
-                                    throw new CensusCustomException(CensusCustomException.ExceptionType.INVALID_DELIMITER, "Invalid Delimiter");
-                            }
-                        }
-                        break;
-                    default:
-                        {
-                            throw new CensusCustomException(CensusCustomException.ExceptionType.NO_SUCH_COUNTRY, "NO SUCH COUNTRY");
-                        }
+                    //Checks for delimiter 
+                    if (!member.Contains(","))
+                        throw new CensusCustomException(CensusCustomException.ExceptionType.INVALID_DELIMITER, "Invalid Delimiter");
                 }
+
             }
             catch (CensusCustomException ex)
             {
                 Console.WriteLine(ex.Message);
             }
+            return result;
         }
     }
 }
