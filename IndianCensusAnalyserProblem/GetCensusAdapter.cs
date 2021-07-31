@@ -9,7 +9,9 @@ namespace IndianCensusAnalyserProblem
     {
         public string[] GetCensusData(string csvStateFilePath, string dataHeaders)
         {
+            //Create an array to store data
             string[] statusData;
+
             //Checking file is exists or not
             if (!File.Exists(csvStateFilePath))
                 throw new CensusCustomException(CensusCustomException.ExceptionType.FILE_NOT_FOUND, "File not found!");
