@@ -16,13 +16,13 @@ namespace IndianCensusProject
         string invalidFileTypePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidCensusFile.css";
         string invalidDelimiterFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\IndianStateCensusWithInvalidDelimiter.csv";
         string invalidHeaderFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\IndianStateCensusWithInvalidHeader.csv";
-
         //Path for state code csv file
         string stateCodeFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\IndianStateCode.csv";
         string stateCodeInvalidFilePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidIndianState.csv";
         string stateCodeInvalidFileTypePath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidCensusFile.css";
         string stateCodeInvalidFileDelimiterPath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidIndianStateDelimiterCode.csv";
         string stateCodeInvalidFileHeaderPath = @"D:\Assignments\IndianCensusAnalyserProblem\IndianCensusAnalyserProblem\InvalidIndianStateHeaderCode.csv";
+
 
         [TestInitialize]
         public void SetUp()
@@ -95,6 +95,77 @@ namespace IndianCensusProject
             try
             {
                 getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, invalidHeaderFilePath, "State,Population,Increase,Area,Density");
+            }
+            catch (CensusCustomException ex)
+            {
+                Assert.AreEqual(ex.Message, "Incorrect Header");
+            }
+        }
+        //TC2.1:Count State CSV records
+        [TestMethod]
+        [TestCategory("Given State CSV Code CSV return Count of fields")]
+        public void TestMethodToCheckCountOfDataRetrieved_StateCodeCsv()
+        {
+            //Excluding Header
+            int expected = 11;
+            string[] result = getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeFilePath, "SerailNo,StateName,StateCode");
+            int actual = result.Length - 1;
+            Assert.AreEqual(expected, actual);
+        }
+        //TC2.2: Check whether File exists
+        [TestMethod]
+        [TestCategory("Invalid File Name")]
+        public void TestMethodToCheckInvalidFileName_StateCodeCsv()
+        {
+            try
+            {
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeInvalidFilePath, "SerailNo,StateName,StateCode");
+
+            }
+            catch (CensusCustomException ex)
+            {
+                Assert.AreEqual(ex.Message, "File not found!");
+            }
+        }
+
+        //TC2.3:Check for proper extension
+        [TestMethod]
+        [TestCategory("Invalid Extension")]
+        public void TestMethodToCheckInvalidFileType_StateCodeCsv()
+        {
+            try
+            {
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeInvalidFileTypePath, "SerailNo,StateName,StateCode");
+
+            }
+            catch (CensusCustomException ex)
+            {
+                Assert.AreEqual(ex.Message, "Invalid Extension");
+            }
+        }
+        //TC2.4:Check for proper delimiter
+        [TestMethod]
+        [TestCategory("Invalid Delimiter")]
+        public void TestMethodToCheckInvalidDelimiter_StateCodeCsv()
+        {
+            try
+            {
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeInvalidFileDelimiterPath, "SerailNo.StateName.StateCode");
+
+            }
+            catch (CensusCustomException ex)
+            {
+                Assert.AreEqual(ex.Message, "Invalid Delimiter");
+            }
+        }
+        //TC2.5: Incorrect Header
+        [TestMethod]
+        [TestCategory("Invalid Header")]
+        public void TestMethodToCheckInvalidHeader_StateCodeCsv()
+        {
+            try
+            {
+                getCensusAdapter.LoadCsvData(CountryChecker.Country.INDIA, stateCodeInvalidFileHeaderPath, "SerailNo,StateName,StateCode");
             }
             catch (CensusCustomException ex)
             {
